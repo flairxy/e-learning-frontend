@@ -1,0 +1,83 @@
+<template>
+  <div>
+    <v-flex>
+      <div height="500" flat>
+        <v-row>
+          <v-col>
+            <div
+              :class="
+                `font-weight-light text-center text ${
+                  $vuetify.breakpoint.smAndDown ? 'headline' : 'display-1'
+                } mt-10`
+              "
+            >
+              How about a working title?
+              <p class="font-regular text--secondary mt-5 subtitle-1">
+                It's ok if you can't think of a good title now. You can change
+                it later.
+              </p>
+            </div>
+          </v-col>
+        </v-row>
+        <v-row class="justify-center">
+          <v-col cols="12" sm="6">
+            <v-text-field
+              solo
+              v-model="title"
+              :counter="counter"
+              :maxlength="counter"
+              label="e.g. Vue Mastery from Beginner to Pro"
+              dense
+              outlined
+            ></v-text-field>
+          </v-col>
+        </v-row>
+
+        <v-card-actions class="card-actions">
+          <v-btn
+            @click="saveTitle"
+            large
+            tile
+            color="error"
+            :disabled="title ? false : true"
+            >Continue</v-btn
+          >
+        </v-card-actions>
+      </div>
+    </v-flex>
+  </div>
+</template>
+<style>
+.card-actions {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+</style>
+<script>
+import api from '~/api/instructor/courseController'
+export default {
+  data() {
+    return {
+      counter: 60,
+      title: ''
+    }
+  },
+  methods: {
+    saveTitle() {
+      //dispatch to the course store
+      this.$store.commit('course/store_title', this.title)
+      this.$router.push({ name: 'management-courses-create-category' })
+    },
+    getTitle() {
+      let title = this.$store.state.course.course
+      if (title) {
+        this.title = title.title
+      }
+    }
+  },
+  created() {
+    this.getTitle()
+  }
+}
+</script>
